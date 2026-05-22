@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe - GameHub</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-content">
+      <div class="logo">🎮 GameHub</div>
+      <div class="nav-buttons">
+        <a href="../index.html" class="nav-btn">← Back Home</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container">
+    <!-- GAME HEADER -->
+    <section class="game-header">
+      <h1>⭕ TIC TAC TOE ⭕</h1>
+      <p>Two player game. Player X goes first, then Player O. First to get three in a row wins!</p>
+    </section>
+
+    <!-- GAME INFO -->
+    <div class="game-info">
+      <div class="info-box">
+        <div class="info-label">Current Player</div>
+        <div class="info-value" id="currentPlayer">X</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">X Wins</div>
+        <div class="info-value" id="xWins">0</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">O Wins</div>
+        <div class="info-value" id="oWins">0</div>
+      </div>
+    </div>
+
+    <!-- GAME CONTAINER -->
+    <div class="game-container">
+      <!-- STATUS MESSAGE -->
+      <div class="tictactoe-status" id="statusMessage">Player X's Turn</div>
+
+      <!-- TIC TAC TOE BOARD -->
+      <div class="tictactoe-board">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn" id="resetBtn">RESET GAME</button>
+        <button class="btn btn-secondary" id="resetScoreBtn">RESET SCORE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2024 GameHub Arcade. Tic Tac Toe Edition. 🎮</p>
+  </footer>
+
+  <script src="../js/tictactoe.js"></script>
+</body>
+</html>

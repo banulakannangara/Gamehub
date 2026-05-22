@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake Game - GameHub</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-content">
+      <div class="logo">🎮 GameHub</div>
+      <div class="nav-buttons">
+        <a href="../index.html" class="nav-btn">← Back Home</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container">
+    <!-- GAME HEADER -->
+    <section class="game-header">
+      <h1>🐍 SNAKE GAME 🐍</h1>
+      <p>Use arrow keys to move. Eat food and avoid hitting walls or yourself!</p>
+    </section>
+
+    <!-- GAME INFO -->
+    <div class="game-info">
+      <div class="info-box">
+        <div class="info-label">Score</div>
+        <div class="info-value" id="scoreDisplay">0</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">High Score</div>
+        <div class="info-value" id="highScoreDisplay">0</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">Level</div>
+        <div class="info-value" id="levelDisplay">1</div>
+      </div>
+    </div>
+
+    <!-- GAME CONTAINER -->
+    <div class="game-container">
+      <canvas id="gameCanvas" width="400" height="400"></canvas>
+    </div>
+
+    <!-- CONTROLS -->
+    <div style="text-align: center; margin-top: 2rem;">
+      <button class="btn" id="startBtn">START GAME</button>
+      <button class="btn btn-secondary" id="pauseBtn">PAUSE</button>
+      <button class="btn btn-secondary" id="restartBtn">RESTART</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2024 GameHub Arcade. Snake Game Edition. 🎮</p>
+  </footer>
+
+  <script src="../js/snake.js"></script>
+</body>
+</html>

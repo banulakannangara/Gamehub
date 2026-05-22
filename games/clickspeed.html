@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click Speed Test - GameHub</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-content">
+      <div class="logo">🎮 GameHub</div>
+      <div class="nav-buttons">
+        <a href="../index.html" class="nav-btn">← Back Home</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container">
+    <!-- GAME HEADER -->
+    <section class="game-header">
+      <h1>⚡ CLICK SPEED TEST ⚡</h1>
+      <p>Click as many times as you can in 10 seconds! Test your reflexes and beat your high score.</p>
+    </section>
+
+    <!-- GAME INFO -->
+    <div class="game-info">
+      <div class="info-box">
+        <div class="info-label">Time Remaining</div>
+        <div class="info-value" id="timerDisplay">10</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">Clicks</div>
+        <div class="info-value" id="clickCount">0</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">High Score</div>
+        <div class="info-value" id="highScore">0</div>
+      </div>
+    </div>
+
+    <!-- GAME CONTAINER -->
+    <div class="game-container">
+      <!-- CLICK ZONE -->
+      <div class="click-zone" id="clickZone">Click Here!</div>
+
+      <!-- RESULT MESSAGE -->
+      <div class="guess-feedback" id="resultMessage"></div>
+
+      <!-- CONTROLS -->
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn" id="startBtn">START TEST</button>
+        <button class="btn btn-secondary" id="resetBtn">RESET</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2024 GameHub Arcade. Click Speed Test Edition. 🎮</p>
+  </footer>
+
+  <script src="../js/clickspeed.js"></script>
+</body>
+</html>

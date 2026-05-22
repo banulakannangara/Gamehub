@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guess the Number - GameHub</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-content">
+      <div class="logo">🎮 GameHub</div>
+      <div class="nav-buttons">
+        <a href="../index.html" class="nav-btn">← Back Home</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container">
+    <!-- GAME HEADER -->
+    <section class="game-header">
+      <h1>🎲 GUESS THE NUMBER 🎲</h1>
+      <p>I'm thinking of a number between 1 and 100. Can you guess it? Use the hints to help you!</p>
+    </section>
+
+    <!-- GAME INFO -->
+    <div class="game-info">
+      <div class="info-box">
+        <div class="info-label">Attempts</div>
+        <div class="info-value" id="attemptsDisplay">0</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">Best Score</div>
+        <div class="info-value" id="bestScoreDisplay">∞</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">Range</div>
+        <div class="info-value" id="rangeDisplay">1-100</div>
+      </div>
+    </div>
+
+    <!-- GAME CONTAINER -->
+    <div class="game-container">
+      <!-- INPUT GROUP -->
+      <div class="guess-input-group">
+        <input type="number" class="guess-input" id="guessInput" placeholder="Enter your guess" min="1" max="100">
+        <button class="btn" id="guessBtn">GUESS</button>
+      </div>
+
+      <!-- FEEDBACK MESSAGE -->
+      <div class="guess-feedback" id="feedbackMessage">Make a guess to start!</div>
+
+      <!-- CONTROLS -->
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn btn-secondary" id="newGameBtn">NEW GAME</button>
+        <button class="btn btn-secondary" id="showAnswerBtn">Show Answer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2024 GameHub Arcade. Guess the Number Edition. 🎮</p>
+  </footer>
+
+  <script src="../js/guessnum.js"></script>
+</body>
+</html>
