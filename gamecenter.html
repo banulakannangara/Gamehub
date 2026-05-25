@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Center - GameHub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="game-center-page">
+  <!-- Particle Background -->
+  <div id="particles-container" class="particles-container"></div>
+
+  <!-- Back Button -->
+  <a href="index.html" class="back-button">
+    <span class="back-icon">← BACK</span>
+  </a>
+
+  <!-- Main Container -->
+  <div class="game-center-container">
+    <!-- Page Title -->
+    <div class="center-title">
+      <h1 class="center-heading">SELECT YOUR GAME</h1>
+    </div>
+
+    <!-- Games Grid -->
+    <div class="games-grid">
+      <!-- Snake Game Card -->
+      <div class="game-card">
+        <div class="card-header">
+          <div class="card-icon">🐍</div>
+          <div class="card-title">Snake</div>
+        </div>
+        <div class="card-body">
+          <p class="card-description">Navigate the neon grid. Eat, grow, survive.</p>
+          <button class="play-btn" onclick="playGame('games/snake.html')">
+            <span>PLAY</span>
+            <span class="play-icon">▶</span>
+          </button>
+        </div>
+        <div class="card-glow"></div>
+      </div>
+
+      <!-- Tic Tac Toe Card -->
+      <div class="game-card">
+        <div class="card-header">
+          <div class="card-icon">⭕</div>
+          <div class="card-title">Tic Tac Toe</div>
+        </div>
+        <div class="card-body">
+          <p class="card-description">Strategic moves. Perfect timing. Victory awaits.</p>
+          <button class="play-btn" onclick="playGame('games/tictactoe.html')">
+            <span>PLAY</span>
+            <span class="play-icon">▶</span>
+          </button>
+        </div>
+        <div class="card-glow"></div>
+      </div>
+
+      <!-- Click Speed Test Card -->
+      <div class="game-card">
+        <div class="card-header">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Click Speed</div>
+        </div>
+        <div class="card-body">
+          <p class="card-description">Test your reflexes. Rapid clicks. Extreme speed.</p>
+          <button class="play-btn" onclick="playGame('games/clickspeed.html')">
+            <span>PLAY</span>
+            <span class="play-icon">▶</span>
+          </button>
+        </div>
+        <div class="card-glow"></div>
+      </div>
+
+      <!-- Guess the Number Card -->
+      <div class="game-card">
+        <div class="card-header">
+          <div class="card-icon">🎯</div>
+          <div class="card-title">Guess Number</div>
+        </div>
+        <div class="card-body">
+          <p class="card-description">Hunt the hidden number. Logic and intuition.</p>
+          <button class="play-btn" onclick="playGame('games/guessnum.html')">
+            <span>PLAY</span>
+            <span class="play-icon">▶</span>
+          </button>
+        </div>
+        <div class="card-glow"></div>
+      </div>
+
+      <!-- Memory Card Game Card -->
+      <div class="game-card">
+        <div class="card-header">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Memory</div>
+        </div>
+        <div class="card-body">
+          <p class="card-description">Match the patterns. Train your mind. Conquer chaos.</p>
+          <button class="play-btn" onclick="playGame('games/memory.html')">
+            <span>PLAY</span>
+            <span class="play-icon">▶</span>
+          </button>
+        </div>
+        <div class="card-glow"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="gamecenter.js"></script>
+</body>
+</html>

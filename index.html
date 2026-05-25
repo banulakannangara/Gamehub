@@ -3,98 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GameHub - Cyberpunk Arcade</title>
+  <title>GameHub - Cyberpunk Gaming Platform</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <!-- HEADER -->
-  <header>
-    <div class="header-content">
-      <div class="logo">🎮 GameHub</div>
-      <div class="nav-buttons">
-        <a href="#home" class="nav-btn">Home</a>
-        <a href="#games" class="nav-btn">Games</a>
-        <a href="#about" class="nav-btn">About</a>
-      </div>
+<body class="landing-page">
+  <!-- Particle Background -->
+  <div id="particles-container" class="particles-container"></div>
+
+  <!-- Canvas for Ninja Animation -->
+  <canvas id="ninja-canvas" class="ninja-canvas"></canvas>
+
+  <!-- Landing Page Content -->
+  <div class="landing-content">
+    <!-- Animated Title -->
+    <div class="gamehub-title">
+      <h1 class="glowing-text">
+        <span class="letter" style="animation-delay: 0s;">G</span>
+        <span class="letter" style="animation-delay: 0.1s;">A</span>
+        <span class="letter" style="animation-delay: 0.2s;">M</span>
+        <span class="letter" style="animation-delay: 0.3s;">E</span>
+        <span class="letter" style="animation-delay: 0.4s;">H</span>
+        <span class="letter" style="animation-delay: 0.5s;">U</span>
+        <span class="letter" style="animation-delay: 0.6s;">B</span>
+      </h1>
     </div>
-  </header>
 
-  <!-- MAIN CONTAINER -->
-  <div class="container">
-    <!-- HERO SECTION -->
-    <section class="hero" id="home">
-      <h1>⚡ GAMEHUB ARCADE ⚡</h1>
-      <p>Welcome to the ultimate cyberpunk gaming platform. Choose your game and step into the neon-lit world of digital entertainment!</p>
-    </section>
+    <!-- Tagline -->
+    <p class="tagline">Enter the Neon Void</p>
 
-    <!-- GAMES GRID -->
-    <section id="games">
-      <div class="games-grid">
-        <!-- Snake Game Card -->
-        <div class="game-card">
-          <div class="game-card-icon">🐍</div>
-          <div class="game-card-content">
-            <h3>Snake Game</h3>
-            <p>Classic snake gameplay with modern cyberpunk style. Navigate through the neon grid and collect food while avoiding collisions!</p>
-            <button class="play-btn" onclick="goToGame('games/snake.html')">Play Now</button>
-          </div>
-        </div>
+    <!-- Enter Button -->
+    <button id="enter-btn" class="enter-button">
+      <span class="button-text">ENTER GAME CENTER</span>
+      <span class="button-glow"></span>
+    </button>
 
-        <!-- Tic Tac Toe Card -->
-        <div class="game-card">
-          <div class="game-card-icon">⭕</div>
-          <div class="game-card-content">
-            <h3>Tic Tac Toe</h3>
-            <p>Two player strategy game. Challenge a friend or play against the computer. Who will claim victory on the digital board?</p>
-            <button class="play-btn" onclick="goToGame('games/tictactoe.html')">Play Now</button>
-          </div>
-        </div>
-
-        <!-- Click Speed Test Card -->
-        <div class="game-card">
-          <div class="game-card-icon">⚡</div>
-          <div class="game-card-content">
-            <h3>Click Speed Test</h3>
-            <p>Test your reflexes in 10 seconds! Click as fast as you can and see how many clicks you can achieve. Beat the high score!</p>
-            <button class="play-btn" onclick="goToGame('games/clickspeed.html')">Play Now</button>
-          </div>
-        </div>
-
-        <!-- Guess the Number Card -->
-        <div class="game-card">
-          <div class="game-card-icon">🎲</div>
-          <div class="game-card-content">
-            <h3>Guess the Number</h3>
-            <p>A number between 1-100 is hidden. Use hints to find it! Each guess brings you closer to victory. How few attempts will it take?</p>
-            <button class="play-btn" onclick="goToGame('games/guessnum.html')">Play Now</button>
-          </div>
-        </div>
-
-        <!-- Memory Card Game Card -->
-        <div class="game-card">
-          <div class="game-card-icon">🧠</div>
-          <div class="game-card-content">
-            <h3>Memory Card Game</h3>
-            <p>Flip cards and match pairs! Test your memory by finding all matching pairs in the shortest time possible.</p>
-            <button class="play-btn" onclick="goToGame('games/memory.html')">Play Now</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT SECTION -->
-    <section id="about" style="text-align: center; margin: 3rem 0; padding: 2rem; border-top: 2px solid var(--primary-purple);">
-      <h2 style="color: var(--cyan-glow); text-shadow: 0 0 10px var(--cyan-glow); margin-bottom: 1rem;">About GameHub</h2>
-      <p style="color: var(--text-secondary); font-size: 1.1rem;">GameHub is a collection of fun mini games built with pure HTML, CSS, and JavaScript. Enjoy classic games with a modern cyberpunk twist!</p>
-      <p style="color: var(--text-secondary); margin-top: 1rem;">Created for entertainment and to showcase web development skills.</p>
-    </section>
+    <!-- Loading Message -->
+    <div id="loading-msg" class="loading-msg">Initiating slash sequence...</div>
   </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2024 GameHub Arcade. All rights reserved. 🎮</p>
-    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Built with ❤️ using vanilla HTML, CSS & JavaScript</p>
-  </footer>
+  <!-- Screen Flash Effect -->
+  <div id="flash-effect" class="flash-effect"></div>
+
+  <!-- Audio Context for Sound Effects -->
+  <script>
+    // Initialize Web Audio API
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  </script>
 
   <script src="main.js"></script>
 </body>

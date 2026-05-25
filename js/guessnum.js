@@ -1,94 +1,106 @@
 // ============================================
-// GUESS THE NUMBER - JAVASCRIPT
+// GUESS THE NUMBER - GAMEHUB
 // ============================================
 
 let secretNumber = 0;
 let attempts = 0;
 let gameActive = true;
-let low = 1;
-let high = 100;
-let bestScore = parseInt(localStorage.getItem('guessNumberBestScore')) || Infinity;
+let bestAttempts = localStorage.getItem('guessBest') || 0;
 
-// Display initial best score
-if (bestScore === Infinity) {
-  document.getElementById('bestScoreDisplay').textContent = '∞';
-} else {
-  document.getElementById('bestScoreDisplay').textContent = bestScore;
+const guessInput = document.getElementById('guessInput');
+const guessBtn = document.getElementById('guessBtn');
+const newGameBtn = document.getElementById('newGameBtn');
+const playAgainBtn = document.getElementById('playAgainBtn');
+const hintDisplay = document.getElementById('hint');
+const attemptsDisplay = document.getElementById('attempts');
+const bestDisplay = document.getElementById('bestAttempts');
+const gameOverModal = document.getElementById('gameOver');
+const finalAttemptsDisplay = document.getElementById('finalAttempts');
+
+bestDisplay.textContent = bestAttempts;
+
+function playSound(type) {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioContext.currentTime;
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+
+    if (type === 'close') {
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(900, now + 0.1);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0, now + 0.1);
+      osc.start(now);
+      osc.stop(now + 0.1);
+    } else if (type === 'win') {
+      osc.frequency.setValueAtTime(1200, now);
+      osc.frequency.exponentialRampToValueAtTime(1400, now + 0.3);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0, now + 0.3);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    }
+  } catch (e) {}
 }
 
-// Initialize game
 function startNewGame() {
   secretNumber = Math.floor(Math.random() * 100) + 1;
   attempts = 0;
   gameActive = true;
-  low = 1;
-  high = 100;
-
-  document.getElementById('attemptsDisplay').textContent = attempts;
-  document.getElementById('rangeDisplay').textContent = low + '-' + high;
-  document.getElementById('feedbackMessage').textContent = 'Make a guess to start!';
-  document.getElementById('guessInput').value = '';
-  document.getElementById('guessInput').focus();
+  attemptsDisplay.textContent = '0';
+  hintDisplay.textContent = 'Start guessing!';
+  guessInput.value = '';
+  guessInput.focus();
+  gameOverModal.classList.remove('active');
 }
 
-// Guess button click
-document.getElementById('guessBtn').addEventListener('click', function() {
+guessBtn.addEventListener('click', () => {
   if (!gameActive) return;
 
-  const guess = parseInt(document.getElementById('guessInput').value);
-  document.getElementById('guessInput').value = '';
+  const guess = parseInt(guessInput.value);
+  guessInput.value = '';
 
-  if (isNaN(guess) || guess < low || guess > high) {
-    document.getElementById('feedbackMessage').textContent = `❌ Please enter a number between ${low} and ${high}!`;
+  if (isNaN(guess) || guess < 1 || guess > 100) {
+    hintDisplay.textContent = '❌ Enter a number between 1-100';
     return;
   }
 
   attempts++;
-  document.getElementById('attemptsDisplay').textContent = attempts;
+  attemptsDisplay.textContent = attempts;
 
   if (guess === secretNumber) {
-    document.getElementById('feedbackMessage').textContent = `🎉 CORRECT! You found it in ${attempts} attempts!`;
     gameActive = false;
-
-    // Update best score
-    if (attempts < bestScore) {
-      bestScore = attempts;
-      localStorage.setItem('guessNumberBestScore', bestScore);
-      document.getElementById('bestScoreDisplay').textContent = bestScore;
-      document.getElementById('feedbackMessage').textContent += `\n✨ NEW BEST SCORE! ✨`;
+    playSound('win');
+    
+    if (bestAttempts === 0 || attempts < bestAttempts) {
+      bestAttempts = attempts;
+      localStorage.setItem('guessBest', bestAttempts);
+      bestDisplay.textContent = bestAttempts;
+      hintDisplay.textContent = '🌟 NEW RECORD! 🌟';
+    } else {
+      hintDisplay.textContent = '🎉 CORRECT!';
     }
+
+    finalAttemptsDisplay.textContent = attempts;
+    setTimeout(() => gameOverModal.classList.add('active'), 500);
   } else if (guess < secretNumber) {
-    low = Math.max(low, guess + 1);
-    document.getElementById('feedbackMessage').textContent = `📈 Too Low! Try Higher (Range: ${low}-${high})`;
-    document.getElementById('rangeDisplay').textContent = low + '-' + high;
+    playSound('close');
+    hintDisplay.textContent = `📈 TOO LOW! Try higher.`;
   } else {
-    high = Math.min(high, guess - 1);
-    document.getElementById('feedbackMessage').textContent = `📉 Too High! Try Lower (Range: ${low}-${high})`;
-    document.getElementById('rangeDisplay').textContent = low + '-' + high;
-  }
-
-  document.getElementById('guessInput').focus();
-});
-
-// New game button
-document.getElementById('newGameBtn').addEventListener('click', function() {
-  startNewGame();
-});
-
-// Show answer button
-document.getElementById('showAnswerBtn').addEventListener('click', function() {
-  if (gameActive) {
-    document.getElementById('feedbackMessage').textContent = `The answer was ${secretNumber}. Game Over!`;
-    gameActive = false;
+    playSound('close');
+    hintDisplay.textContent = `📉 TOO HIGH! Try lower.`;
   }
 });
 
-// Allow Enter key to submit guess
-document.getElementById('guessInput').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    document.getElementById('guessBtn').click();
-  }
+guessInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') guessBtn.click();
 });
 
-// Start the game on page load
+newGameBtn.addEventListener('click', startNewGame);
+playAgainBtn.addEventListener('click', startNewGame);
+
 startNewGame();

@@ -5,49 +5,174 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tic Tac Toe - GameHub</title>
   <link rel="stylesheet" href="../style.css">
+  <style>
+    .tictactoe-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .tictactoe-board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 10px;
+      margin: 2rem 0;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, rgba(139, 0, 255, 0.2), rgba(0, 212, 255, 0.1));
+      border: 3px solid var(--primary-purple);
+      color: var(--cyan-glow);
+      font-size: 2.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Courier New', monospace;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 10px var(--cyan-glow);
+    }
+
+    .cell:hover {
+      background: linear-gradient(135deg, rgba(139, 0, 255, 0.4), rgba(0, 212, 255, 0.2));
+      box-shadow: 0 0 20px var(--primary-purple);
+      transform: scale(1.05);
+    }
+
+    .tictactoe-status {
+      text-align: center;
+      font-size: 1.5rem;
+      color: var(--cyan-glow);
+      text-shadow: 0 0 10px var(--cyan-glow);
+      min-height: 2rem;
+      margin: 1rem 0;
+      letter-spacing: 0.1em;
+    }
+
+    .tictactoe-stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(139, 0, 255, 0.1);
+      border: 2px solid var(--border-color);
+      border-radius: 5px;
+      min-width: 150px;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      color: var(--cyan-glow);
+      font-weight: bold;
+      text-shadow: 0 0 10px var(--cyan-glow);
+    }
+
+    .game-controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .control-btn {
+      padding: 0.8rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+      border: 2px solid var(--secondary-purple);
+      color: white;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(217, 70, 239, 0.5);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .control-btn:hover {
+      background: linear-gradient(135deg, var(--secondary-purple), var(--primary-purple));
+      box-shadow: 0 0 25px rgba(217, 70, 239, 0.8);
+      transform: scale(1.05);
+    }
+
+    .game-over-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .game-over-modal.active {
+      display: flex;
+    }
+
+    .game-over-content {
+      background: linear-gradient(135deg, var(--card-bg) 0%, #2a1f4a 100%);
+      border: 3px solid var(--cyan-glow);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 0 40px var(--cyan-glow);
+    }
+
+    .game-over-content h2 {
+      font-size: 2.5rem;
+      color: var(--secondary-purple);
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px var(--secondary-purple);
+    }
+
+    .winner-message {
+      font-size: 2rem;
+      color: var(--cyan-glow);
+      margin: 1rem 0;
+      text-shadow: 0 0 15px var(--cyan-glow);
+    }
+  </style>
 </head>
-<body>
-  <!-- HEADER -->
-  <header>
-    <div class="header-content">
-      <div class="logo">🎮 GameHub</div>
-      <div class="nav-buttons">
-        <a href="../index.html" class="nav-btn">← Back Home</a>
-      </div>
-    </div>
-  </header>
+<body class="game-page">
+  <div id="particles-container" class="particles-container"></div>
 
-  <!-- MAIN CONTAINER -->
+  <a href="../gamecenter.html" class="back-button">
+    <span class="back-icon">← BACK</span>
+  </a>
+
   <div class="container">
-    <!-- GAME HEADER -->
-    <section class="game-header">
-      <h1>⭕ TIC TAC TOE ⭕</h1>
-      <p>Two player game. Player X goes first, then Player O. First to get three in a row wins!</p>
-    </section>
-
-    <!-- GAME INFO -->
-    <div class="game-info">
-      <div class="info-box">
-        <div class="info-label">Current Player</div>
-        <div class="info-value" id="currentPlayer">X</div>
-      </div>
-      <div class="info-box">
-        <div class="info-label">X Wins</div>
-        <div class="info-value" id="xWins">0</div>
-      </div>
-      <div class="info-box">
-        <div class="info-label">O Wins</div>
-        <div class="info-value" id="oWins">0</div>
-      </div>
+    <div class="game-header">
+      <h1>⭕ TIC TAC TOE</h1>
+      <p>Two Player Strategy Game - X vs O</p>
     </div>
 
-    <!-- GAME CONTAINER -->
-    <div class="game-container">
-      <!-- STATUS MESSAGE -->
-      <div class="tictactoe-status" id="statusMessage">Player X's Turn</div>
+    <div class="tictactoe-container">
+      <div class="tictactoe-status" id="status">Player X's Turn</div>
 
-      <!-- TIC TAC TOE BOARD -->
-      <div class="tictactoe-board">
+      <div class="tictactoe-board" id="board">
         <div class="cell" data-index="0"></div>
         <div class="cell" data-index="1"></div>
         <div class="cell" data-index="2"></div>
@@ -59,18 +184,39 @@
         <div class="cell" data-index="8"></div>
       </div>
 
-      <!-- CONTROLS -->
-      <div style="text-align: center; margin-top: 2rem;">
-        <button class="btn" id="resetBtn">RESET GAME</button>
-        <button class="btn btn-secondary" id="resetScoreBtn">RESET SCORE</button>
+      <div class="tictactoe-stats">
+        <div class="stat-box">
+          <div class="stat-label">Player X Wins</div>
+          <div class="stat-value" id="xWins">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Draw</div>
+          <div class="stat-value" id="draws">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Player O Wins</div>
+          <div class="stat-value" id="oWins">0</div>
+        </div>
+      </div>
+
+      <div class="game-controls">
+        <button class="control-btn" id="resetBtn">NEW GAME</button>
+        <button class="control-btn" id="resetScoreBtn">RESET SCORE</button>
+        <a href="../gamecenter.html" class="control-btn">EXIT</a>
       </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2024 GameHub Arcade. Tic Tac Toe Edition. 🎮</p>
-  </footer>
+  <div class="game-over-modal" id="gameOverModal">
+    <div class="game-over-content">
+      <h2 id="modalTitle">GAME OVER!</h2>
+      <div class="winner-message" id="modalMessage">Draw Game!</div>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+        <button class="control-btn" id="playAgainBtn">PLAY AGAIN</button>
+        <a href="../gamecenter.html" class="control-btn">RETURN</a>
+      </div>
+    </div>
+  </div>
 
   <script src="../js/tictactoe.js"></script>
 </body>

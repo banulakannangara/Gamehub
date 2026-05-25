@@ -1,82 +1,115 @@
 // ============================================
-// CLICK SPEED TEST - JAVASCRIPT
+// CLICK SPEED TEST - GAMEHUB
 // ============================================
 
-let clickCount = 0;
-let timeRemaining = 10;
-let gameActive = false;
-let highScore = parseInt(localStorage.getItem('clickSpeedHighScore')) || 0;
-let gameTimer = null;
+let timeLeft = 10;
+let clicks = 0;
+let bestScore = localStorage.getItem('clickBest') || 0;
+let isRunning = false;
+let startTime = 0;
+let timerInterval = null;
 
-// Display initial high score
-document.getElementById('highScore').textContent = highScore;
+const clickZone = document.getElementById('clickZone');
+const startBtn = document.getElementById('startBtn');
+const retryBtn = document.getElementById('retryBtn');
+const timer = document.getElementById('timer');
+const clicksDisplay = document.getElementById('clicks');
+const bestDisplay = document.getElementById('best');
+const cpsDisplay = document.getElementById('cps');
+const gameOverModal = document.getElementById('gameOver');
+const finalClicksDisplay = document.getElementById('finalClicks');
 
-// Start test
-document.getElementById('startBtn').addEventListener('click', function() {
-  if (gameActive) return;
+bestDisplay.textContent = bestScore;
 
-  clickCount = 0;
-  timeRemaining = 10;
-  gameActive = true;
+function playSound(type) {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioContext.currentTime;
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
 
-  document.getElementById('clickCount').textContent = clickCount;
-  document.getElementById('timerDisplay').textContent = timeRemaining;
-  document.getElementById('resultMessage').textContent = '';
-  this.disabled = true;
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
 
-  gameTimer = setInterval(() => {
-    timeRemaining--;
-    document.getElementById('timerDisplay').textContent = timeRemaining;
+    if (type === 'click') {
+      osc.frequency.setValueAtTime(1000, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.05);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.exponentialRampToValueAtTime(0, now + 0.05);
+      osc.start(now);
+      osc.stop(now + 0.05);
+    } else if (type === 'complete') {
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(1000, now + 0.2);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0, now + 0.2);
+      osc.start(now);
+      osc.stop(now + 0.2);
+    }
+  } catch (e) {}
+}
 
-    if (timeRemaining <= 0) {
+function startTest() {
+  if (isRunning) return;
+  
+  isRunning = true;
+  timeLeft = 10;
+  clicks = 0;
+  startTime = Date.now();
+  clicksDisplay.textContent = '0';
+  cpsDisplay.textContent = '0';
+  startBtn.disabled = true;
+  startBtn.style.opacity = '0.5';
+  clickZone.style.pointerEvents = 'auto';
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    timer.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
       endTest();
     }
   }, 1000);
-});
-
-// Click zone click
-document.getElementById('clickZone').addEventListener('click', function(e) {
-  if (!gameActive) return;
-
-  clickCount++;
-  document.getElementById('clickCount').textContent = clickCount;
-
-  // Visual feedback
-  this.style.transform = 'scale(0.95)';
-  setTimeout(() => {
-    this.style.transform = 'scale(1)';
-  }, 100);
-});
-
-// End test
-function endTest() {
-  gameActive = false;
-  clearInterval(gameTimer);
-
-  // Update high score
-  if (clickCount > highScore) {
-    highScore = clickCount;
-    localStorage.setItem('clickSpeedHighScore', highScore);
-    document.getElementById('highScore').textContent = highScore;
-    document.getElementById('resultMessage').textContent = `✨ NEW HIGH SCORE! ✨\nYou clicked ${clickCount} times!`;
-  } else {
-    document.getElementById('resultMessage').textContent = `You clicked ${clickCount} times!\nHigh Score: ${highScore}`;
-  }
-
-  document.getElementById('startBtn').disabled = false;
-  document.getElementById('startBtn').textContent = 'PLAY AGAIN';
 }
 
-// Reset
-document.getElementById('resetBtn').addEventListener('click', function() {
-  clearInterval(gameTimer);
-  gameActive = false;
-  clickCount = 0;
-  timeRemaining = 10;
+function endTest() {
+  isRunning = false;
+  clearInterval(timerInterval);
+  clickZone.style.pointerEvents = 'none';
+  
+  playSound('complete');
 
-  document.getElementById('clickCount').textContent = clickCount;
-  document.getElementById('timerDisplay').textContent = timeRemaining;
-  document.getElementById('resultMessage').textContent = '';
-  document.getElementById('startBtn').disabled = false;
-  document.getElementById('startBtn').textContent = 'START TEST';
+  if (clicks > bestScore) {
+    bestScore = clicks;
+    localStorage.setItem('clickBest', bestScore);
+    bestDisplay.textContent = bestScore;
+  }
+
+  finalClicksDisplay.textContent = clicks;
+  gameOverModal.classList.add('active');
+  startBtn.disabled = false;
+  startBtn.style.opacity = '1';
+}
+
+clickZone.addEventListener('click', () => {
+  if (!isRunning) return;
+  
+  clicks++;
+  clicksDisplay.textContent = clicks;
+  
+  const elapsedSeconds = (Date.now() - startTime) / 1000;
+  const cpsValue = (clicks / elapsedSeconds).toFixed(2);
+  cpsDisplay.textContent = cpsValue;
+
+  playSound('click');
+
+  // Visual feedback
+  clickZone.classList.add('active');
+  setTimeout(() => clickZone.classList.remove('active'), 100);
+});
+
+startBtn.addEventListener('click', startTest);
+retryBtn.addEventListener('click', () => {
+  gameOverModal.classList.remove('active');
+  startTest();
 });

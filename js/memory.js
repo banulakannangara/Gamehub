@@ -1,24 +1,62 @@
 // ============================================
-// MEMORY CARD GAME - JAVASCRIPT
+// MEMORY CARD GAME - GAMEHUB
 // ============================================
 
-const emojis = ['🎮', '🎮', '🎯', '🎯', '⭐', '⭐', '🎪', '🎪', '🎨', '🎨', '🎭', '🎭', '🎸', '🎸', '🎲', '🎲'];
+const emojis = ['🚀', '🚀', '🎮', '🎮', '⭐', '⭐', '🎨', '🎨', '💎', '💎', '🔥', '🔥', '🎯', '🎯', '✨', '✨'];
 let cards = [];
 let flipped = [];
 let matched = [];
 let moves = 0;
 let gameActive = true;
-let bestScore = parseInt(localStorage.getItem('memoryBestScore')) || Infinity;
+let bestScore = localStorage.getItem('memoryBest') || 0;
 let matchedPairs = 0;
 
-// Display initial best score
-if (bestScore === Infinity) {
-  document.getElementById('bestScoreDisplay').textContent = '∞';
-} else {
-  document.getElementById('bestScoreDisplay').textContent = bestScore;
+const gameGrid = document.getElementById('gameGrid');
+const movesDisplay = document.getElementById('moves');
+const matchedDisplay = document.getElementById('matched');
+const bestScoreDisplay = document.getElementById('bestScore');
+const gameOverModal = document.getElementById('gameOver');
+const finalMovesDisplay = document.getElementById('finalMoves');
+const newGameBtn = document.getElementById('newGameBtn');
+const playAgainBtn = document.getElementById('playAgainBtn');
+
+bestScoreDisplay.textContent = bestScore;
+
+function playSound(type) {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioContext.currentTime;
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+
+    if (type === 'flip') {
+      osc.frequency.setValueAtTime(600, now);
+      osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.exponentialRampToValueAtTime(0, now + 0.1);
+      osc.start(now);
+      osc.stop(now + 0.1);
+    } else if (type === 'match') {
+      osc.frequency.setValueAtTime(1000, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.2);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0, now + 0.2);
+      osc.start(now);
+      osc.stop(now + 0.2);
+    } else if (type === 'complete') {
+      osc.frequency.setValueAtTime(1400, now);
+      osc.frequency.exponentialRampToValueAtTime(1600, now + 0.3);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0, now + 0.3);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    }
+  } catch (e) {}
 }
 
-// Initialize game
 function initGame() {
   cards = [...emojis].sort(() => Math.random() - 0.5);
   flipped = [];
@@ -27,17 +65,15 @@ function initGame() {
   gameActive = true;
   matchedPairs = 0;
 
-  document.getElementById('movesDisplay').textContent = moves;
-  document.getElementById('matchedDisplay').textContent = matchedPairs + '/8';
-  document.getElementById('resultMessage').textContent = '';
+  movesDisplay.textContent = '0';
+  matchedDisplay.textContent = '0/8';
+  gameOverModal.classList.remove('active');
 
   renderCards();
 }
 
-// Render cards
 function renderCards() {
-  const grid = document.getElementById('memoryGrid');
-  grid.innerHTML = '';
+  gameGrid.innerHTML = '';
 
   cards.forEach((emoji, index) => {
     const card = document.createElement('div');
@@ -47,77 +83,64 @@ function renderCards() {
     if (flipped.includes(index) || matched.includes(index)) {
       card.classList.add('flipped');
       card.textContent = emoji;
-    }
-
-    if (matched.includes(index)) {
-      card.classList.add('matched');
+      if (matched.includes(index)) card.classList.add('matched');
     }
 
     card.addEventListener('click', () => flipCard(index));
-    grid.appendChild(card);
+    gameGrid.appendChild(card);
   });
 }
 
-// Flip card
 function flipCard(index) {
-  if (!gameActive || flipped.includes(index) || matched.includes(index)) return;
+  if (!gameActive || flipped.includes(index) || matched.includes(index) || flipped.length >= 2) return;
 
   flipped.push(index);
+  playSound('flip');
   renderCards();
 
   if (flipped.length === 2) {
-    checkMatch();
-  }
-}
+    gameActive = false;
+    moves++;
+    movesDisplay.textContent = moves;
 
-// Check match
-function checkMatch() {
-  moves++;
-  document.getElementById('movesDisplay').textContent = moves;
-
-  const [first, second] = flipped;
-
-  if (cards[first] === cards[second]) {
-    matched.push(first, second);
-    matchedPairs++;
-    document.getElementById('matchedDisplay').textContent = matchedPairs + '/8';
-
-    flipped = [];
-    renderCards();
-
-    // Check if game won
-    if (matchedPairs === 8) {
-      gameActive = false;
-      document.getElementById('resultMessage').textContent = `🎉 YOU WON! 🎉\nCompleted in ${moves} moves!`;
-
-      // Update best score
-      if (moves < bestScore) {
-        bestScore = moves;
-        localStorage.setItem('memoryBestScore', bestScore);
-        document.getElementById('bestScoreDisplay').textContent = bestScore;
-        document.getElementById('resultMessage').textContent += `\n✨ NEW BEST SCORE! ✨`;
-      }
-    }
-  } else {
-    setTimeout(() => {
+    const [first, second] = flipped;
+    if (cards[first] === cards[second]) {
+      playSound('match');
+      matched.push(first, second);
+      matchedPairs++;
+      matchedDisplay.textContent = `${matchedPairs}/8`;
       flipped = [];
-      renderCards();
-    }, 1000);
+      gameActive = true;
+
+      if (matchedPairs === 8) {
+        endGame();
+      } else {
+        renderCards();
+      }
+    } else {
+      setTimeout(() => {
+        flipped = [];
+        gameActive = true;
+        renderCards();
+      }, 600);
+    }
   }
 }
 
-// New game button
-document.getElementById('newGameBtn').addEventListener('click', function() {
-  initGame();
-});
+function endGame() {
+  playSound('complete');
 
-// Reset score button
-document.getElementById('resetScoreBtn').addEventListener('click', function() {
-  bestScore = Infinity;
-  localStorage.removeItem('memoryBestScore');
-  document.getElementById('bestScoreDisplay').textContent = '∞';
-  initGame();
-});
+  if (bestScore === 0 || moves < bestScore) {
+    bestScore = moves;
+    localStorage.setItem('memoryBest', bestScore);
+    bestScoreDisplay.textContent = bestScore;
+  }
 
-// Start the game on page load
+  finalMovesDisplay.textContent = moves;
+  gameOverModal.classList.add('active');
+}
+
+newGameBtn.addEventListener('click', initGame);
+playAgainBtn.addEventListener('click', initGame);
+
 initGame();

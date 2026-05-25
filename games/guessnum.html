@@ -3,68 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guess the Number - GameHub</title>
+  <title>Guess Number - GameHub</title>
   <link rel="stylesheet" href="../style.css">
+  <style>
+    .guess-container { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+    .number-input { width: 200px; padding: 1rem; font-size: 1.5rem; text-align: center; background: rgba(139, 0, 255, 0.2); border: 2px solid var(--primary-purple); color: var(--cyan-glow); border-radius: 5px; font-family: 'Courier New', monospace; }
+    .hint-box { font-size: 1.5rem; color: var(--secondary-purple); text-shadow: 0 0 10px var(--secondary-purple); padding: 1rem; background: rgba(139, 0, 255, 0.1); border: 2px solid var(--border-color); border-radius: 5px; min-height: 2rem; }
+    .stat-box { text-align: center; padding: 1rem; background: rgba(139, 0, 255, 0.1); border: 2px solid var(--border-color); border-radius: 5px; min-width: 150px; }
+    .stat-label { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; }
+    .stat-value { font-size: 2rem; color: var(--cyan-glow); font-weight: bold; text-shadow: 0 0 10px var(--cyan-glow); }
+    .stats { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
+    .controls { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn { padding: 0.8rem 1.5rem; background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple)); border: 2px solid var(--secondary-purple); color: white; font-family: 'Courier New', monospace; font-size: 1rem; font-weight: bold; cursor: pointer; border-radius: 5px; box-shadow: 0 0 15px rgba(217, 70, 239, 0.5); letter-spacing: 0.1em; text-decoration: none; display: inline-block; transition: all 0.3s; }
+    .btn:hover { background: linear-gradient(135deg, var(--secondary-purple), var(--primary-purple)); box-shadow: 0 0 25px rgba(217, 70, 239, 0.8); transform: scale(1.05); }
+    .game-over { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .game-over.active { display: flex; }
+    .result { background: linear-gradient(135deg, var(--card-bg) 0%, #2a1f4a 100%); border: 3px solid var(--cyan-glow); border-radius: 10px; padding: 2rem; text-align: center; box-shadow: 0 0 40px var(--cyan-glow); }
+    .result h2 { font-size: 2rem; color: var(--cyan-glow); margin-bottom: 1rem; }
+    .final-value { font-size: 2.5rem; color: var(--secondary-purple); margin: 1rem 0; text-shadow: 0 0 15px var(--secondary-purple); }
+  </style>
 </head>
-<body>
-  <!-- HEADER -->
-  <header>
-    <div class="header-content">
-      <div class="logo">🎮 GameHub</div>
-      <div class="nav-buttons">
-        <a href="../index.html" class="nav-btn">← Back Home</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN CONTAINER -->
+<body class="game-page">
+  <div id="particles-container" class="particles-container"></div>
+  <a href="../gamecenter.html" class="back-button"><span class="back-icon">← BACK</span></a>
   <div class="container">
-    <!-- GAME HEADER -->
-    <section class="game-header">
-      <h1>🎲 GUESS THE NUMBER 🎲</h1>
-      <p>I'm thinking of a number between 1 and 100. Can you guess it? Use the hints to help you!</p>
-    </section>
-
-    <!-- GAME INFO -->
-    <div class="game-info">
-      <div class="info-box">
-        <div class="info-label">Attempts</div>
-        <div class="info-value" id="attemptsDisplay">0</div>
-      </div>
-      <div class="info-box">
-        <div class="info-label">Best Score</div>
-        <div class="info-value" id="bestScoreDisplay">∞</div>
-      </div>
-      <div class="info-box">
-        <div class="info-label">Range</div>
-        <div class="info-value" id="rangeDisplay">1-100</div>
-      </div>
+    <div class="game-header">
+      <h1>🎯 GUESS THE NUMBER</h1>
+      <p>I'm thinking of a number between 1-100. Can you guess it?</p>
     </div>
-
-    <!-- GAME CONTAINER -->
-    <div class="game-container">
-      <!-- INPUT GROUP -->
-      <div class="guess-input-group">
-        <input type="number" class="guess-input" id="guessInput" placeholder="Enter your guess" min="1" max="100">
-        <button class="btn" id="guessBtn">GUESS</button>
+    <div class="guess-container">
+      <input type="number" id="guessInput" class="number-input" placeholder="Enter guess" min="1" max="100">
+      <div class="hint-box" id="hint">Start guessing!</div>
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-label">Attempts</div>
+          <div class="stat-value" id="attempts">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Best Score</div>
+          <div class="stat-value" id="bestAttempts">0</div>
+        </div>
       </div>
-
-      <!-- FEEDBACK MESSAGE -->
-      <div class="guess-feedback" id="feedbackMessage">Make a guess to start!</div>
-
-      <!-- CONTROLS -->
-      <div style="text-align: center; margin-top: 2rem;">
-        <button class="btn btn-secondary" id="newGameBtn">NEW GAME</button>
-        <button class="btn btn-secondary" id="showAnswerBtn">Show Answer</button>
+      <div class="controls">
+        <button class="btn" id="guessBtn">GUESS</button>
+        <button class="btn" id="newGameBtn">NEW GAME</button>
+        <a href="../gamecenter.html" class="btn">EXIT</a>
       </div>
     </div>
   </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2024 GameHub Arcade. Guess the Number Edition. 🎮</p>
-  </footer>
-
+  <div class="game-over" id="gameOver">
+    <div class="result">
+      <h2>🎉 YOU WIN!</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 1rem;">You found the number in:</p>
+      <div class="final-value" id="finalAttempts">0</div>
+      <p style="color: var(--text-secondary); margin-bottom: 1rem;">Attempts</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+        <button class="btn" id="playAgainBtn">PLAY AGAIN</button>
+        <a href="../gamecenter.html" class="btn">RETURN</a>
+      </div>
+    </div>
+  </div>
   <script src="../js/guessnum.js"></script>
 </body>
 </html>

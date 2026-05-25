@@ -5,59 +5,148 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Snake Game - GameHub</title>
   <link rel="stylesheet" href="../style.css">
+  <style>
+    .snake-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    #gameCanvas {
+      background: rgba(5, 8, 18, 0.95);
+      border: 3px solid var(--cyan-glow);
+      display: block;
+      box-shadow: 0 0 30px var(--cyan-glow), inset 0 0 20px rgba(0, 212, 255, 0.1);
+      border-radius: 5px;
+    }
+
+    .game-controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .control-btn {
+      padding: 0.8rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+      border: 2px solid var(--secondary-purple);
+      color: white;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(217, 70, 239, 0.5);
+      letter-spacing: 0.1em;
+    }
+
+    .control-btn:hover {
+      background: linear-gradient(135deg, var(--secondary-purple), var(--primary-purple));
+      box-shadow: 0 0 25px rgba(217, 70, 239, 0.8);
+      transform: scale(1.05);
+    }
+
+    .snake-stats {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .game-over-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .game-over-modal.active {
+      display: flex;
+    }
+
+    .game-over-content {
+      background: linear-gradient(135deg, var(--card-bg) 0%, #2a1f4a 100%);
+      border: 3px solid var(--cyan-glow);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 0 40px var(--cyan-glow);
+    }
+
+    .game-over-content h2 {
+      font-size: 2.5rem;
+      color: var(--secondary-purple);
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px var(--secondary-purple);
+    }
+
+    .final-score {
+      font-size: 3rem;
+      color: var(--cyan-glow);
+      margin: 1rem 0;
+      text-shadow: 0 0 15px var(--cyan-glow);
+    }
+  </style>
 </head>
-<body>
-  <!-- HEADER -->
-  <header>
-    <div class="header-content">
-      <div class="logo">🎮 GameHub</div>
-      <div class="nav-buttons">
-        <a href="../index.html" class="nav-btn">← Back Home</a>
-      </div>
-    </div>
-  </header>
+<body class="game-page">
+  <div id="particles-container" class="particles-container"></div>
 
-  <!-- MAIN CONTAINER -->
+  <a href="../gamecenter.html" class="back-button">
+    <span class="back-icon">← BACK</span>
+  </a>
+
   <div class="container">
-    <!-- GAME HEADER -->
-    <section class="game-header">
-      <h1>🐍 SNAKE GAME 🐍</h1>
-      <p>Use arrow keys to move. Eat food and avoid hitting walls or yourself!</p>
-    </section>
-
-    <!-- GAME INFO -->
-    <div class="game-info">
-      <div class="info-box">
-        <div class="info-label">Score</div>
-        <div class="info-value" id="scoreDisplay">0</div>
-      </div>
-      <div class="info-box">
-        <div class="info-label">High Score</div>
-        <div class="info-value" id="highScoreDisplay">0</div>
-      </div>
-      <div class="info-box">
-        <div class="info-label">Level</div>
-        <div class="info-value" id="levelDisplay">1</div>
-      </div>
+    <div class="game-header">
+      <h1>🐍 SNAKE GAME</h1>
+      <p>Navigate the grid, eat food, avoid collisions!</p>
     </div>
 
-    <!-- GAME CONTAINER -->
-    <div class="game-container">
+    <div class="snake-container">
       <canvas id="gameCanvas" width="400" height="400"></canvas>
-    </div>
 
-    <!-- CONTROLS -->
-    <div style="text-align: center; margin-top: 2rem;">
-      <button class="btn" id="startBtn">START GAME</button>
-      <button class="btn btn-secondary" id="pauseBtn">PAUSE</button>
-      <button class="btn btn-secondary" id="restartBtn">RESTART</button>
+      <div class="snake-stats">
+        <div class="stat-box">
+          <div class="stat-label">Score</div>
+          <div class="stat-value" id="score">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Best Score</div>
+          <div class="stat-value" id="bestScore">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Level</div>
+          <div class="stat-value" id="level">1</div>
+        </div>
+      </div>
+
+      <div class="game-controls">
+        <button class="control-btn" id="pauseBtn">PAUSE</button>
+        <button class="control-btn" id="restartBtn">RESTART</button>
+        <a href="../gamecenter.html" class="control-btn">EXIT</a>
+      </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2024 GameHub Arcade. Snake Game Edition. 🎮</p>
-  </footer>
+  <div class="game-over-modal" id="gameOverModal">
+    <div class="game-over-content">
+      <h2>GAME OVER!</h2>
+      <div class="final-score" id="finalScore">0</div>
+      <p style="color: var(--text-secondary); margin-bottom: 1rem;">Points Scored</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <button class="control-btn" id="restartGameBtn">PLAY AGAIN</button>
+        <a href="../gamecenter.html" class="control-btn">RETURN</a>
+      </div>
+    </div>
+  </div>
 
   <script src="../js/snake.js"></script>
 </body>
